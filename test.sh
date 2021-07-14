@@ -11,6 +11,8 @@ echo "installing packages"
 pip3 install -r requirements.txt
 
 # Start tests
+export DEBUG="True"
 echo "launching tests..."
+pytest test_Vm.py
 
 

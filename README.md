@@ -11,5 +11,5 @@ This package simulates a load-balancing environment in python
     Main code for the module
 * requirements.txt  
     Project requirements
-* test.sh
+* test.sh  
     Activate virtual environment, install packages and run tests
