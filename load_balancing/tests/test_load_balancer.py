@@ -1,3 +1,5 @@
+"""Tests the code implemented in load_balancer.py
+"""
 from load_balancing.server.load_balancer import Server
 
 

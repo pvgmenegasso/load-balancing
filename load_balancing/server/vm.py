@@ -66,6 +66,11 @@ class User():
 
     def tick(self):
         """Passes time by one tick"""
+        if self.__ticksLeft == 0:
+            if DEBUG:
+                print("Cannot tick this user !!")
+                raise ValueError
+            raise ValueError
         # Decreases number of ticks left
         self.__ticksLeft = self.__ticksLeft - 1
 
@@ -98,7 +103,15 @@ class User():
         return False
 
     def ticksPassed(self):
-        return User.__ttask - self.__ticksLeft + 1
+        """Return quantity of ticks passed since the
+        User was created
+
+        Returns
+        -------
+        int :
+            The number of ticks passed
+        """
+        return User.__ttask - self.__ticksLeft
     
 
 class Vm():
@@ -110,30 +123,45 @@ class Vm():
     __umax : int
         Maximum number of users per Vm
 
+    Class Methods
+    -------------
+    add_users(list, int):
+        adds int users to a given list of vms
+
     Attributes
     ----------
     users : list[User]
         A list of users on the Vm
     __ticks : int
         The total lifetime counter of this server
-
-
-    Methods
-    ------- 
-    tick():
-        Run a tick on this machine
-    add_user():
-        Adds a user on this machine
-    remove_user(User):
-        Remove a user on this machine
-    is_full() : bool
-        Returns true if this vm is full
-    is_empty() : bool, int
-        Returns true if this Vm has no users
-        Also returns ticks used
     """
 
     __umax : int
+
+    def add_users(vms : list, number : int):
+        """Add users to a list of vms
+        create another vm if needed
+        vms : list[Vm]
+            The vms to add to
+        number : int
+            how many users to add
+        """
+        users = 0
+        while users < number :
+
+            # get all not full vms
+            vmsWithSpace = [
+                vm for vm in vms if not vm.is_full()]
+
+            # check to see if there are not full vms
+            if len(vmsWithSpace) > 0:
+                # add users to them
+                for vm in vmsWithSpace:
+                    vm.add_user()
+                    users += 1
+            else:
+                # There are no vms with space, add another
+                vms.append(Vm())
 
     def __init__(self):
         """Creates a new instance of a vm"""
@@ -142,14 +170,17 @@ class Vm():
         # Initiates an empty list of Users
         self.__users : list[User] = []
 
-    def set_umax(umax : int):
+    def set_params(umax : int, ttask : int):
         """Set the class attribute umax
 
         Parameters
         ----------
         umax : int
             The max number of users per Vm
+        ttask : int
+            The cost of each task
         """
+
         # umax cannot be 0 or less
         if umax <= 0:
             if DEBUG:
@@ -166,17 +197,19 @@ class Vm():
 
         # umax is a valid value, assign it
         Vm.__umax = umax
+        User.set_ttask(ttask)
 
     def is_full(self):
         """Checks if this vm is full
 
         Returns
         -------
-        True
+        True :
             if this Vm is full
-        False
+        False "
             if this Vm is not full
         """
+
         if len(self.__users) == Vm.__umax:
             return True
         return False
@@ -186,11 +219,12 @@ class Vm():
 
         Returns
         -------
-        True, int : Number of ticks
+        True : 
             if this Vm is empty
-        False, list[User] : Users on vm
+        False :
             if this Vm is not empty
         """
+
         if len(self.__users) == 0:
             return True
         return False
@@ -230,19 +264,19 @@ class Vm():
     def tick(self):
         """Passes a unit of time on this machine"""
 
-        # get all finished users
-        users = [user for user in self.__users if user.isOver()]
-
-        # remove all processes that have been finished:
-        for user in users:
-            self.remove_user(user)
-
         # Don't even tick if Vm is empty
         if self.is_empty():
             if DEBUG:
                 print(" Oh ! Vm is empty, can't tick !")
                 raise RuntimeError
             raise RuntimeError
+
+        # get all finished users
+        users = [user for user in self.__users if user.isOver()]
+
+        # remove all processes that have been finished:
+        for user in users:
+            self.remove_user(user)
 
         # goes through all users for that machine
         for user in self.__users:
@@ -260,38 +294,18 @@ class Vm():
     def get_users(self):
         return self.__users
 
-    def add_users(vms : list, number : int):
-        """Add users to a list of vms
-        create another vm if needed
-        """
-        users = 0
-        while users < number :
-
-            # get all not full vms
-            vmsWithSpace = [
-                vm for vm in vms if not vm.is_full()]
-
-            # check to see if there are not full vms
-            if len(vmsWithSpace) > 0:
-                # add users to them
-                for vm in vmsWithSpace:
-                    vm.add_user()
-                    users += 1
-            else:
-                # There are no vms with space, add another
-                vms.append(Vm())
-
-    def to_str(self):
-        # Count users
+    def print(self):
+        """Prints the vm in a more elegant format"""
         nUsers = len(self.get_users())
-        print("--", end = "")
+        print("----", end = "")
         for user in self.__users:
-            print("--", end = "")
+            print("----", end = "")
         print("")
         print("| ", end = " ")
         for user in self.__users:
             print(str(user.ticksPassed()), end = " | ")
         print("")
+        print("----", end = "")
         for user in self.__users:
-            print("--", end = "")
+            print("----", end = "")
         print("")

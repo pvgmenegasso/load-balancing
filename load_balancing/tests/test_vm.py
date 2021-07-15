@@ -10,15 +10,14 @@ def test_invalid_constants():
     with pytest.raises(Exception):
         User.set_ttask(11)
     with pytest.raises(Exception):
-        Vm.set_umax(0)
+        Vm.set_params(0)
     with pytest.raises(Exception):
-        Vm.set_umax(11)
+        Vm.set_params(11)
 
 # Can we remove things or add when we shouldn't ?
 def test_out_of_bounds():
     with pytest.raises(Exception):
-        User.set_ttask(1)
-        Vm.set_umax(1)
+        Vm.set_params(1, 1)
         # can we create a vm ?
         newVm = Vm()
         # can we add a user ? We should
@@ -26,20 +25,20 @@ def test_out_of_bounds():
         # can we add another ? We shouldn't be able to
         newVm.add_user()
     with pytest.raises(Exception):
-        User.set_ttask(1)
-        Vm.set_umax(1)
+        Vm.set_params(1, 1)
         newVm = Vm()
         newVm.add_user()
-        newVm.tick()
+        print(newVm.get_users())
+        newVm.get_users()[0].tick()
         # This tick should be impossible
-        newVm.tick()
+        newVm.get_users()[0].tick()
     
     
 # Now we execute a simple test
 def test_simple_use():
     # Simulate ttask 4 and umax 2
-    Vm.set_umax(2)
-    User.set_ttask(4)
+    Vm.set_params(2, 4)
+
     # Now we simulate 6 ticks and check states
 
     # First tick
