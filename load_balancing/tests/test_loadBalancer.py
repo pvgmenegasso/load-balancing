@@ -1,4 +1,5 @@
-from load_balancer import *
+from load_balancing.server.load_balancer import Server
+
 
 def test_simple():
     # Simulate ttask 4 and umax 2

@@ -1,4 +1,5 @@
-from vm import *
+from load_balancing.server.vm import User, Vm
+
 
 class Server():
 

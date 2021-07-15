@@ -1,4 +1,6 @@
-from vm import *
+from load_balancing.server.vm import User
+from load_balancing.server.vm import Vm
+
 import pytest
 
 # First we verify the ttask and umax limits
