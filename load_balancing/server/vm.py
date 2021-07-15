@@ -1,7 +1,7 @@
 """This module defines a VM for usage in the simulation environment"""
 
 from os import environ
-
+import math
 # Check DEBUG environment variable and assign it
 if environ.get('DEBUG') == "True":
     DEBUG = True
@@ -96,6 +96,9 @@ class User():
             raise RuntimeError
         # Everything seems fine, task not over !
         return False
+
+    def ticksPassed(self):
+        return User.__ttask - self.__ticksLeft + 1
     
 
 class Vm():
@@ -277,3 +280,17 @@ class Vm():
             else:
                 # There are no vms with space, add another
                 vms.append(Vm())
+
+    def to_str(self):
+        # Count users
+        nUsers = len(self.get_users())
+        print("--", end = "")
+        for user in self.__users:
+            print("--", end = "")
+        print("")
+        print("| ", end = " ")
+        for user in self.__users:
+            print(str(user.ticksPassed()), end = " | ")
+        print("")
+        for user in self.__users:
+            print("--", end = "")

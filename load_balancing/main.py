@@ -38,7 +38,7 @@ def main(file : str):
         output.append(server.simulate())
         for vm in server.get_vms():
             print(" VM ----------------")
-            print("VM: "+str(len(vm.get_users()))+" ticks  "+str(vm.get_ticks()))
+            vm.to_str()
         row += 1
 
     while len([vm for vm in server.get_vms() if len(vm.get_users()) > 0]):
@@ -46,7 +46,7 @@ def main(file : str):
         output.append(server.simulate())
         for vm in server.get_vms():
             print("VM ----------------")
-            print("VM: "+str(len(vm.get_users()))+" ticks  "+str(vm.get_ticks()))
+            vm.to_str()
         row += 1
 
     return output
