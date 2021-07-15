@@ -294,3 +294,4 @@ class Vm():
         print("")
         for user in self.__users:
             print("--", end = "")
+        print("")
