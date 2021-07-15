@@ -1,5 +1,4 @@
 """
-
 Blank Lines
 
 Surround top-level function and class definitions with two blank lines.
@@ -17,7 +16,38 @@ Many tools treat these characters as page separators, so you may use them
 to separate pages of related sections of your file. Note, some editors and
 web-based code viewers may not recognize control-L as a form feed and will
 show another glyph in its place.
-
-
-
 """
+
+from load_balancing.io import input
+from load_balancing.server.load_balancer import Server
+from load_balancing.server.vm import User, Vm
+def main(file : str):
+
+    # Get from file
+    (ttask, umax, usersPerTick) = input.parse_input(file)
+
+    server = Server(umax, ttask)
+
+    output : list[list[int]] = []
+
+    row = 0
+
+    while len(usersPerTick) > 0:
+        print("Simulation ================="+str(row))
+        server.add_user(usersPerTick.pop())
+        output.append(server.simulate())
+        for vm in server.get_vms():
+            print(" VM ----------------")
+            print("VM: "+str(len(vm.get_users()))+" ticks  "+str(vm.get_ticks()))
+        row += 1
+
+    while len([vm for vm in server.get_vms() if len(vm.get_users()) > 0]):
+        print("Simulation ================="+str(row))
+        output.append(server.simulate())
+        for vm in server.get_vms():
+            print("VM ----------------")
+            print("VM: "+str(len(vm.get_users()))+" ticks  "+str(vm.get_ticks()))
+        row += 1
+
+    return output
+

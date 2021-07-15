@@ -188,9 +188,8 @@ class Vm():
         False, list[User] : Users on vm
             if this Vm is not empty
         """
-        print(self.__users)
         if len(self.__users) == 0:
-            return True, self.__ticks
+            return True
         return False
 
     def add_user(self):
@@ -235,10 +234,10 @@ class Vm():
         for user in users:
             self.remove_user(user)
 
-        # Don't even tick if server is empty
+        # Don't even tick if Vm is empty
         if self.is_empty():
             if DEBUG:
-                print(" Oh ! Server is empty, can't tick !")
+                print(" Oh ! Vm is empty, can't tick !")
                 raise RuntimeError
             raise RuntimeError
 

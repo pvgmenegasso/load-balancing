@@ -9,3 +9,23 @@ umax  = max number of simultaneous users
 tick  = basic time unit for the simulation
 """
 
+def parse_input(file : str):
+    """
+    Returns
+    -------
+    ttask, umax, usersPerTick : int, int, list[int]
+    """
+
+    stream = open(file)
+
+    ttask = int(stream.readline().strip())
+    umax = int(stream.readline().strip())
+
+    usersPerTick : list[int]= []
+
+    for line in stream.readlines():
+        usersPerTick.append(int(line.strip(" ")))
+
+    stream.close()
+
+    return ttask, umax, usersPerTick

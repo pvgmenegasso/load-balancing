@@ -51,6 +51,11 @@ class Server():
         self.__vms = [vm for vm in self.__vms if not vm.is_empty()]
 
     def get_vms(self):
+        """
+        Returns
+        -------
+        list[Vm] : the vms
+        """
         return self.__vms
 
     def users_on_vm(vm : Vm):

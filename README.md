@@ -36,8 +36,12 @@ Execute the script ./test.sh to activate python venv and run tests
             Tests for the vm.py file
         * test_load_balancing.py  
             Tests for the load_balancer file
+        * test_input.py
+            Tests file input
+        * test main.py
+            Try tu run the full project
     * requirements.txt  
         Project requirements
-    * test.sh  
-        Activate virtual environment, install packages and run tests
+* test.sh  
+    Activate virtual environment, install packages and run tests
   
