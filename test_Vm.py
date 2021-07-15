@@ -2,7 +2,6 @@ from vm import *
 import pytest
 
 # First we verify the ttask and umax limits
-
 def test_invalid_constants():
     with pytest.raises(Exception):
         User.set_ttask(0)
@@ -33,7 +32,7 @@ def test_out_of_bounds():
         # This tick should be impossible
         newVm.tick()
     
-
+    
 # Now we execute a simple test
 def test_simple_use():
     # Simulate ttask 4 and umax 2
@@ -76,7 +75,7 @@ def test_simple_use():
     assert vms[0].get_ticks() == 3
     assert vms[1].get_ticks() == 2
 
-    # Third tick
+    # fourth tick
     for vm in vms:
         vm.tick()
 
@@ -90,4 +89,3 @@ def test_simple_use():
     assert vms[0].get_ticks() == 5
     assert vms[1].get_ticks() == 4
     assert len(vms[0].get_users()) == 1
-

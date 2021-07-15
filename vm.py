@@ -191,7 +191,7 @@ class Vm():
         print(self.__users)
         if len(self.__users) == 0:
             return True, self.__ticks
-        return False, self.get_users()
+        return False
 
     def add_user(self):
         """Adds a new user to this vm"""
@@ -216,7 +216,7 @@ class Vm():
         """
 
         # Checks if there is an user to remove
-        if self.is_empty()[0]:
+        if self.is_empty():
             # is the debug environment variable enabled ?
             if DEBUG:
                 print(" Cannot remove User ! Server already empty")
@@ -236,7 +236,7 @@ class Vm():
             self.remove_user(user)
 
         # Don't even tick if server is empty
-        if self.is_empty()[0]:
+        if self.is_empty():
             if DEBUG:
                 print(" Oh ! Server is empty, can't tick !")
                 raise RuntimeError
@@ -259,6 +259,9 @@ class Vm():
         return self.__users
 
     def add_users(vms : list, number : int):
+        """Add users to a list of vms
+        create another vm if needed
+        """
         users = 0
         while users < number :
 
@@ -266,12 +269,12 @@ class Vm():
             vmsWithSpace = [
                 vm for vm in vms if not vm.is_full()]
 
-            # check to see if there are empty vms
+            # check to see if there are not full vms
             if len(vmsWithSpace) > 0:
                 # add users to them
                 for vm in vmsWithSpace:
-                    vm.add_user() 
+                    vm.add_user()
                     users += 1
             else:
-                # There are no empty vms, add another
+                # There are no vms with space, add another
                 vms.append(Vm())
