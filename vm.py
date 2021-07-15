@@ -185,13 +185,13 @@ class Vm():
         -------
         True, int : Number of ticks
             if this Vm is empty
-        False
+        False, list[User] : Users on vm
             if this Vm is not empty
         """
         print(self.__users)
         if len(self.__users) == 0:
             return True, self.__ticks
-        return False
+        return False, self.get_users()
 
     def add_user(self):
         """Adds a new user to this vm"""
@@ -204,10 +204,9 @@ class Vm():
                 raise IndexError
             raise IndexError
         # Everything seems fine ! Add user
-        new = User()
-        self.__users.append(new)
+        self.__users.append(User())
 
-    def remove_user(self, user : int):
+    def remove_user(self, user : User):
         """Removes a user from this machine
 
         Parameters
@@ -217,41 +216,62 @@ class Vm():
         """
 
         # Checks if there is an user to remove
-        if self.is_empty():
+        if self.is_empty()[0]:
             # is the debug environment variable enabled ?
             if DEBUG:
                 print(" Cannot remove User ! Server already empty")
                 raise ValueError
             raise ValueError
         # User seems removable
-        self.__users.remove(self.__users.pop(user))
+        self.__users.remove(user)
 
     def tick(self):
         """Passes a unit of time on this machine"""
 
+        # get all finished users
+        users = [user for user in self.__users if user.isOver()]
+
+        # remove all processes that have been finished:
+        for user in users:
+            self.remove_user(user)
+
         # Don't even tick if server is empty
-        if self.is_empty():
+        if self.is_empty()[0]:
             if DEBUG:
                 print(" Oh ! Server is empty, can't tick !")
                 raise RuntimeError
             raise RuntimeError
-
-        userIndexes = []
 
         # goes through all users for that machine
         for user in self.__users:
             # if the user process is not over, do it !
             if not user.isOver():
                 user.tick()
-            else:
-                # The user process is over Save it's index
-                userIndexes.append(self.__users.index(user))
-
-        # remove all processes that have been finished:
-        for index in userIndexes:
-            self.remove_user(index)
 
         # all the user processes are done ! Tick completed !
-
         self.__ticks += 1
         return
+
+    def get_ticks(self):
+        return self.__ticks
+
+    def get_users(self):
+        return self.__users
+
+    def add_users(vms : list, number : int):
+        users = 0
+        while users < number :
+
+            # get all not full vms
+            vmsWithSpace = [
+                vm for vm in vms if not vm.is_full()]
+
+            # check to see if there are empty vms
+            if len(vmsWithSpace) > 0:
+                # add users to them
+                for vm in vmsWithSpace:
+                    vm.add_user() 
+                    users += 1
+            else:
+                # There are no empty vms, add another
+                vms.append(Vm())
